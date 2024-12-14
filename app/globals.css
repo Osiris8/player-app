@@ -19,3 +19,7 @@ body {
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+.bg-hero {
+  background-image: url("../public/images/bayern.jpg"); /* Remplace par le chemin de ton image */
+}
