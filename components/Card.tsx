@@ -3,6 +3,11 @@ import PlayerCard from "./PlayerCard";
 import Search from "./Search";
 import cr7 from "@/public/images/christiano-ronaldo.webp";
 import messi from "@/public/images/messi.webp";
+import kb from "@/public/images/kilyan-mbappe.webp";
+import sadio from "@/public/images/sadio.webp";
+import vinicius from "@/public/images/vinicius.webp";
+import jude from "@/public/images/jude.jpg";
+import haaland from "@/public/images/haaland.jpg";
 const players = [
   {
     name: "Lionel Messi",
@@ -29,8 +34,20 @@ const players = [
     },
   },
   {
+    name: "Jude Belligham",
+    imageUrl: jude,
+    club: "Real Madrid",
+    country: "England",
+    position: "Midfielder",
+    age: 24,
+    publisher: {
+      name: "Alex Johnson",
+      avatarUrl: "/placeholder.svg?height=40&width=40",
+    },
+  },
+  {
     name: "Kylian Mbappé",
-    imageUrl: "/placeholder.svg?height=300&width=200",
+    imageUrl: kb,
     club: "Paris Saint-Germain",
     country: "France",
     position: "Forward",
@@ -42,7 +59,7 @@ const players = [
   },
   {
     name: "Erling Haaland",
-    imageUrl: "/placeholder.svg?height=40&width=40",
+    imageUrl: haaland,
     club: "Manchester City",
     country: "Norway",
     position: "Forward",
@@ -53,11 +70,11 @@ const players = [
     },
   },
   {
-    name: "Kevin De Bruyne",
-    imageUrl: "/placeholder.svg?height=300&width=200",
-    club: "Manchester City",
-    country: "Belgium",
-    position: "Midfielder",
+    name: "Sadio",
+    imageUrl: sadio,
+    club: "Al Nassr",
+    country: "Senegal",
+    position: "Forward",
     age: 32,
     publisher: {
       name: "Mike Wilson",
@@ -65,9 +82,9 @@ const players = [
     },
   },
   {
-    name: "Neymar Jr.",
-    imageUrl: "/placeholder.svg?height=300&width=200",
-    club: "Al Hilal",
+    name: "Vinicius",
+    imageUrl: vinicius,
+    club: "Real Madrid",
     country: "Brazil",
     position: "Forward",
     age: 31,
