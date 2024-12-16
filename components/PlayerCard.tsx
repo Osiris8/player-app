@@ -77,7 +77,7 @@ export default function PlayerCard({
               <AvatarFallback>{publisher.name.charAt(0)}</AvatarFallback>
             </Avatar>
             <div>
-              <p className="text-sm font-medium">Published by</p>
+              <p className="text-sm font-bold">Published by</p>
               <p className="text-xs text-muted-foreground">{publisher.name}</p>
             </div>
           </div>
