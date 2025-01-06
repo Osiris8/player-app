@@ -1,3 +1,8 @@
+"use client";
+import {
+  RegisterLink,
+  LoginLink,
+} from "@kinde-oss/kinde-auth-nextjs/components";
 export default function Navbar() {
   return (
     <div className="navbar bg-base-100">
@@ -59,8 +64,8 @@ export default function Navbar() {
         </ul>
       </div>
       <div className="navbar-end">
-        <a className="btn btn-secondary mr-2">Sign In</a>
-        <a className="btn btn-primary">Sign Up</a>
+        <LoginLink className="btn btn-secondary mr-2"> Sign In</LoginLink>
+        <RegisterLink className="btn btn-primary"> Sign Up</RegisterLink>
       </div>
     </div>
   );
