@@ -30,7 +30,7 @@ interface PlayerFormProps {
   };
 }
 
-export function PlayerForm({ initialData }: PlayerFormProps) {
+export default function PlayerForm({ initialData }: PlayerFormProps) {
   const router = useRouter();
   const [formData, setFormData] = useState(
     initialData || {

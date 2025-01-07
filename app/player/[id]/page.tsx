@@ -25,9 +25,18 @@ const playerData = {
 export default function Home() {
   return (
     <div data-theme="elegant">
-      <Navbar />
-      <PlayerDetailCard {...playerData} />
-      <Footer />
+      <div className="flex flex-col min-h-screen">
+        <Navbar />
+        <main className="py-12">
+          <div className="container mx-auto px-4">
+            <h1 className="text-3xl font-bold mb-8 text-center">
+              Player Detail
+            </h1>
+            <PlayerDetailCard {...playerData} />
+          </div>
+        </main>
+        <Footer />
+      </div>
     </div>
   );
 }
