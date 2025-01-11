@@ -62,7 +62,7 @@ export default function PlayerForm({ initialData }: PlayerFormProps) {
     e.preventDefault();
 
     try {
-      const response = await fetch("/api/players", {
+      const response = await fetch("/api/player", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
