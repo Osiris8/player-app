@@ -58,12 +58,31 @@ export default function PlayerForm({ initialData }: PlayerFormProps) {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Here you would typically send the data to your backend
-    console.log("Form submitted:", formData);
-    // Redirect to the player's detail page (you'd use the actual ID in a real app)
-    router.push("/players/1");
+
+    try {
+      const response = await fetch("/api/players", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        throw new Error("Une erreur est survenue lors de l'envoi des données.");
+      }
+
+      const data = await response.json();
+      console.log("Form submitted successfully:", data);
+
+      // Redirection if success
+      router.push(`/players/${data.id}`); // To use API ID
+    } catch (error) {
+      console.error("Erreur lors de l'envoi du formulaire :", error);
+      alert("Une erreur est survenue. Veuillez réessayer.");
+    }
   };
 
   return (
