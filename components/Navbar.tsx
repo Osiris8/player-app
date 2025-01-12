@@ -1,9 +1,16 @@
 "use client";
+import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import {
   RegisterLink,
   LoginLink,
 } from "@kinde-oss/kinde-auth-nextjs/components";
+
 export default function Navbar() {
+  const { isAuthenticated, isLoading, user } = useKindeBrowserClient();
+  console.log(user);
+
+  if (isLoading) return <div>Loading...</div>;
+
   return (
     <div className="navbar bg-white">
       <div className="navbar-start">
@@ -63,10 +70,41 @@ export default function Navbar() {
           </li>
         </ul>
       </div>
-      <div className="navbar-end">
-        <LoginLink className="btn btn-secondary mr-2"> Sign In</LoginLink>
-        <RegisterLink className="btn btn-primary"> Sign Up</RegisterLink>
-      </div>
+      {isAuthenticated ? (
+        <div className="navbar-end">
+          <div className="dropdown dropdown-end">
+            <div
+              tabIndex={0}
+              role="button"
+              className="btn btn-ghost btn-circle avatar"
+            >
+              <div className="w-10 rounded-full">
+                <div className="avatar placeholder">
+                  <div className="bg-neutral text-neutral-content w-10 rounded-full">
+                    <span className="text-xl">{user?.given_name?.[0]}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <ul
+              tabIndex={0}
+              className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
+            >
+              <li>
+                <a>Add New Player</a>
+              </li>
+              <li>
+                <a>Logout</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      ) : (
+        <div className="navbar-end">
+          <LoginLink className="btn btn-secondary mr-2"> Sign In</LoginLink>
+          <RegisterLink className="btn btn-primary"> Sign Up</RegisterLink>
+        </div>
+      )}
     </div>
   );
 }

@@ -1,5 +1,5 @@
 "use client";
-
+import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -17,6 +17,7 @@ import {
 
 interface PlayerFormProps {
   initialData?: {
+    userId: string;
     name: string;
     imageUrl: string;
     club: string;
@@ -31,9 +32,12 @@ interface PlayerFormProps {
 }
 
 export default function PlayerForm({ initialData }: PlayerFormProps) {
+  const { user } = useKindeBrowserClient();
+  const userId = user?.id;
   const router = useRouter();
   const [formData, setFormData] = useState(
     initialData || {
+      userId: userId,
       name: "",
       imageUrl: "",
       club: "",
@@ -78,10 +82,10 @@ export default function PlayerForm({ initialData }: PlayerFormProps) {
       console.log("Form submitted successfully:", data);
 
       // Redirection if success
-      router.push(`/players/${data.id}`); // To use API ID
+      router.push(`/player/${data._id}`); // To use API ID
     } catch (error) {
-      console.error("Erreur lors de l'envoi du formulaire :", error);
-      alert("Une erreur est survenue. Veuillez réessayer.");
+      console.error("Error to submit a form :", error);
+      alert("Error to submit. Please to try");
     }
   };
 

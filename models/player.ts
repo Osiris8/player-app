@@ -1,7 +1,7 @@
 import { Schema, model, models, Model } from "mongoose";
 
 // Interface for player
-export interface Player {
+interface PlayerProps {
   name: string;
   imageUrl: string;
   club: string;
@@ -15,7 +15,7 @@ export interface Player {
 }
 
 // Définition of schema Mongoose
-const PlayerSchema = new Schema<Player>(
+const PlayerSchema = new Schema<PlayerProps>(
   {
     name: { type: String, required: true },
     imageUrl: { type: String, required: false },
@@ -34,6 +34,7 @@ const PlayerSchema = new Schema<Player>(
 );
 
 // Création du modèle
-const Player: Model<Player> = models.Player || model("Player", PlayerSchema);
+const Player: Model<PlayerProps> =
+  models.Player || model("Player", PlayerSchema);
 
 export default Player;

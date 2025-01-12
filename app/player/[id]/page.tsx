@@ -1,28 +1,94 @@
+"use client";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 import { PlayerDetailCard } from "@/components/PlayerDetailCard";
-import messi from "@/public/images/messi.webp";
-const playerData = {
-  id: "1",
-  name: "Lionel Messi",
-  imageUrl: messi,
-  club: "Inter Miami CF",
-  country: "Argentina",
-  position: "Forward",
-  age: 36,
-  publisher: {
-    name: "John Doe",
-    avatarUrl: "/placeholder.svg?height=40&width=40",
-  },
-  description:
-    "Lionel Messi is widely regarded as one of the greatest football players of all time. Known for his exceptional dribbling skills, vision, and goal-scoring ability, Messi has consistently performed at the highest level throughout his career.",
-  history:
-    "Born in Rosario, Argentina, Messi joined Barcelona's youth academy at the age of 13. He made his first-team debut at 17 and quickly established himself as one of the world's best players.",
-  career:
-    "Messi spent the majority of his career at Barcelona, where he won numerous titles including 10 La Liga titles and 4 UEFA Champions League trophies. He later moved to Paris Saint-Germain before joining Inter Miami CF in Major League Soccer.",
-  goals: 672,
-};
+import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 export default function Home() {
+  const pathname = usePathname();
+
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const [playerData, setPlayerData] = useState({
+    id: "",
+    name: "",
+    imageUrl: "",
+    club: "",
+    country: "",
+    position: "",
+    age: 0,
+    publisher: {
+      name: "",
+      avatarUrl: "",
+    },
+    description: "",
+    history: "",
+    career: "",
+    goals: 0,
+  });
+
+  useEffect(() => {
+    const playerId = `${pathname}`.split("/").pop();
+    console.log(playerId);
+    if (!playerId) return;
+
+    const fetchPlayer = async () => {
+      try {
+        setLoading(true); // Démarrage du chargement
+        const response = await fetch(`/api/player/${playerId}`);
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || "Failed to fetch player data");
+        }
+
+        const data = await response.json();
+        setPlayerData({
+          id: data.id || "",
+          name: data.name || "",
+          imageUrl: data.imageUrl || "",
+          club: data.club || "",
+          country: data.country || "",
+          position: data.position || "",
+          age: data.age || 0,
+          publisher: {
+            name: data.publisher?.name || "",
+            avatarUrl: data.publisher?.avatarUrl || "",
+          },
+          description: data.description || "",
+          history: data.history || "",
+          career: data.career || "",
+          goals: data.goals || 0,
+        });
+        setError(null); // Réinitialiser les erreurs en cas de succès
+      } catch (err) {
+        console.log(err);
+      } finally {
+        setLoading(false); // Fin du chargement
+      }
+    };
+
+    fetchPlayer();
+  }, [pathname]);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <p>Loading...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <p className="text-red-500">Error: {error}</p>
+      </div>
+    );
+  }
+
   return (
     <div data-theme="elegant">
       <div className="flex flex-col min-h-screen">
@@ -32,6 +98,11 @@ export default function Home() {
             <h1 className="text-3xl font-bold mb-8 text-center">
               Player Detail
             </h1>
+            <div className="mb-6 flex justify-center">
+              <Button asChild>
+                <Link href="/player/add">Add New Player</Link>
+              </Button>
+            </div>
             <PlayerDetailCard {...playerData} />
           </div>
         </main>
