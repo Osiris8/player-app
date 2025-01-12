@@ -2,6 +2,7 @@ import { Schema, model, models, Model } from "mongoose";
 
 // Interface for player
 interface PlayerProps {
+  userId: string;
   name: string;
   imageUrl: string;
   club: string;
@@ -17,6 +18,7 @@ interface PlayerProps {
 // Définition of schema Mongoose
 const PlayerSchema = new Schema<PlayerProps>(
   {
+    userId: { type: String, required: true },
     name: { type: String, required: true },
     imageUrl: { type: String, required: false },
     club: { type: String, required: true },

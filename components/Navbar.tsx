@@ -6,10 +6,7 @@ import {
 } from "@kinde-oss/kinde-auth-nextjs/components";
 
 export default function Navbar() {
-  const { isAuthenticated, isLoading, user } = useKindeBrowserClient();
-  console.log(user);
-
-  if (isLoading) return <div>Loading...</div>;
+  const { isAuthenticated, user } = useKindeBrowserClient();
 
   return (
     <div className="navbar bg-white">

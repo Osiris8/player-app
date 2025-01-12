@@ -13,7 +13,6 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
 
   const [playerData, setPlayerData] = useState({
-    id: "",
     name: "",
     imageUrl: "",
     club: "",
@@ -46,7 +45,6 @@ export default function Home() {
 
         const data = await response.json();
         setPlayerData({
-          id: data.id || "",
           name: data.name || "",
           imageUrl: data.imageUrl || "",
           club: data.club || "",
