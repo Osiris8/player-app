@@ -6,13 +6,16 @@ import { Button } from "@/components/ui/button";
 import { PlayerDetailCard } from "@/components/PlayerDetailCard";
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
+import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 export default function Home() {
   const pathname = usePathname();
-
+  const { user } = useKindeBrowserClient();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isPlayerCreator, setIsPlayerCreator] = useState(false);
 
   const [playerData, setPlayerData] = useState({
+    id: "",
     name: "",
     imageUrl: "",
     club: "",
@@ -44,7 +47,9 @@ export default function Home() {
         }
 
         const data = await response.json();
+        console.log(data);
         setPlayerData({
+          id: data._id,
           name: data.name || "",
           imageUrl: data.imageUrl || "",
           club: data.club || "",
@@ -60,7 +65,16 @@ export default function Home() {
           career: data.career || "",
           goals: data.goals || 0,
         });
-        setError(null); // Réinitialiser les erreurs en cas de succès
+        setError(null);
+        //Verify the creator of player
+        const userId = user?.id;
+        if ((data.userId = userId)) {
+          console.log(data.userId);
+          console.log(data._id);
+          setIsPlayerCreator(true); // Définir si l'utilisateur est le créateur
+        } else {
+          setIsPlayerCreator(false);
+        }
       } catch (err) {
         console.log(err);
       } finally {
@@ -69,7 +83,7 @@ export default function Home() {
     };
 
     fetchPlayer();
-  }, [pathname]);
+  }, [pathname, user?.id]);
 
   if (loading) {
     return (
@@ -97,9 +111,17 @@ export default function Home() {
               Player Detail
             </h1>
             <div className="mb-6 flex justify-center">
-              <Button asChild>
-                <Link href="/player/add">Add New Player</Link>
-              </Button>
+              {isPlayerCreator ? (
+                <Button asChild>
+                  <Link href={`/player/edit/${playerData.id}`}>
+                    Edit Player
+                  </Link>
+                </Button>
+              ) : (
+                <Button asChild>
+                  <Link href="/player/add">Add New Player</Link>
+                </Button>
+              )}
             </div>
             <PlayerDetailCard {...playerData} />
           </div>

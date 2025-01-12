@@ -4,6 +4,7 @@ import Player from "@/models/player";
 export const POST = async (request: Request) => {
   try {
     const {
+      userId,
       name,
       imageUrl,
       club,
@@ -19,6 +20,7 @@ export const POST = async (request: Request) => {
     await connectToDB();
 
     const newPlayer = new Player({
+      userId,
       name,
       imageUrl,
       club,

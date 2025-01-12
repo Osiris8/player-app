@@ -1,6 +1,6 @@
 "use client";
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -33,11 +33,11 @@ interface PlayerFormProps {
 
 export default function PlayerForm({ initialData }: PlayerFormProps) {
   const { user } = useKindeBrowserClient();
-  const userId = user?.id;
+
   const router = useRouter();
   const [formData, setFormData] = useState(
     initialData || {
-      userId: userId,
+      userId: user?.id,
       name: "",
       imageUrl: "",
       club: "",
@@ -50,6 +50,13 @@ export default function PlayerForm({ initialData }: PlayerFormProps) {
       goals: 0,
     }
   );
+
+  useEffect(() => {
+    // Update UserId if it's available
+    if (user?.id) {
+      setFormData((prev) => ({ ...prev, userId: user.id }));
+    }
+  }, [user?.id]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -85,6 +92,7 @@ export default function PlayerForm({ initialData }: PlayerFormProps) {
       router.push(`/player/${data._id}`); // To use API ID
     } catch (error) {
       console.error("Error to submit a form :", error);
+      console.log(formData);
       alert("Error to submit. Please to try");
     }
   };
