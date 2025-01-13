@@ -1,7 +1,7 @@
 "use client";
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -33,8 +33,9 @@ interface PlayerFormProps {
 
 export default function PlayerForm({ initialData }: PlayerFormProps) {
   const { user } = useKindeBrowserClient();
-
   const router = useRouter();
+  const pathname = usePathname();
+  const [isPlayerCreator, setIsPlayerCreator] = useState(false);
   const [formData, setFormData] = useState(
     initialData || {
       userId: user?.id,
@@ -55,8 +56,32 @@ export default function PlayerForm({ initialData }: PlayerFormProps) {
     // Update UserId if it's available
     if (user?.id) {
       setFormData((prev) => ({ ...prev, userId: user.id }));
+
+      const playerId = pathname.split("/").pop();
+
+      if (playerId) {
+        const fetchPlayerData = async () => {
+          try {
+            const response = await fetch(`/api/player/${playerId}`);
+            if (!response.ok) {
+              throw new Error("Unable to fetch player data");
+            }
+            const data = await response.json();
+
+            // Vérifiez si l'utilisateur est le créateur
+            if (data.userId === user?.id) {
+              setFormData(data); // Préremplir les champs si créateur
+              setIsPlayerCreator(true);
+            }
+          } catch (err) {
+            console.error(err);
+          }
+        };
+
+        fetchPlayerData();
+      }
     }
-  }, [user?.id]);
+  }, [user?.id, pathname]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -101,7 +126,7 @@ export default function PlayerForm({ initialData }: PlayerFormProps) {
     <Card className="w-full max-w-4xl mx-auto">
       <CardHeader>
         <CardTitle className="text-2xl font-bold">
-          {initialData ? "Edit Player" : "Add New Player"}
+          {isPlayerCreator ? "Edit Player" : "Add New Player"}
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -222,7 +247,7 @@ export default function PlayerForm({ initialData }: PlayerFormProps) {
             />
           </div>
           <Button type="submit" className="w-full">
-            {initialData ? "Update Player" : "Add Player"}
+            {isPlayerCreator ? "Update Player" : "Add Player"}
           </Button>
         </form>
       </CardContent>
