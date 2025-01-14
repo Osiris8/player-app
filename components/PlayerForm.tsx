@@ -68,9 +68,9 @@ export default function PlayerForm({ initialData }: PlayerFormProps) {
             }
             const data = await response.json();
 
-            // Vérifiez si l'utilisateur est le créateur
+            // Vérify if the creator exist
             if (data.userId === user?.id) {
-              setFormData(data); // Préremplir les champs si créateur
+              setFormData(data); // Pre-fill fields if creator
               setIsPlayerCreator(true);
             }
           } catch (err) {
@@ -98,8 +98,15 @@ export default function PlayerForm({ initialData }: PlayerFormProps) {
     e.preventDefault();
 
     try {
-      const response = await fetch("/api/player", {
-        method: "POST",
+      const playerId = pathname.split("/").pop();
+      const endpoint = isPlayerCreator
+        ? `/api/player/${playerId}` // Modification if the creator exist
+        : "/api/player"; // Creation if not
+
+      const method = isPlayerCreator ? "PATCH" : "POST";
+
+      const response = await fetch(endpoint, {
+        method,
         headers: {
           "Content-Type": "application/json",
         },
@@ -107,18 +114,17 @@ export default function PlayerForm({ initialData }: PlayerFormProps) {
       });
 
       if (!response.ok) {
-        throw new Error("Une erreur est survenue lors de l'envoi des données.");
+        throw new Error("Error to send data.");
       }
 
       const data = await response.json();
       console.log("Form submitted successfully:", data);
 
-      // Redirection if success
-      router.push(`/player/${data._id}`); // To use API ID
+      // Redirection après succès
+      router.push(`/player/${data._id}`); // Utilisez l'ID retourné par l'API
     } catch (error) {
-      console.error("Error to submit a form :", error);
-      console.log(formData);
-      alert("Error to submit. Please to try");
+      console.error("Error to seend the form :", error);
+      alert("Error, please to resend.");
     }
   };
 
