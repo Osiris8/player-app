@@ -128,6 +128,34 @@ export default function PlayerForm({ initialData }: PlayerFormProps) {
     }
   };
 
+  const handleDelete = async () => {
+    const playerId = pathname.split("/").pop();
+    if (!playerId) return alert("Player ID is missing.");
+    if (!isPlayerCreator)
+      return alert("You are not authorized to delete this player.");
+
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this player?"
+    );
+    if (!confirmDelete) return;
+
+    try {
+      const response = await fetch(`/api/player/${playerId}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to delete player.");
+      }
+
+      alert("Player deleted successfully.");
+      router.push("/players"); // Rediriger vers la liste des joueurs
+    } catch (error) {
+      console.error("Error deleting player:", error);
+      alert("An error occurred while deleting the player.");
+    }
+  };
+
   return (
     <Card className="w-full max-w-4xl mx-auto">
       <CardHeader>
@@ -252,9 +280,20 @@ export default function PlayerForm({ initialData }: PlayerFormProps) {
               required
             />
           </div>
-          <Button type="submit" className="w-full">
-            {isPlayerCreator ? "Update Player" : "Add Player"}
-          </Button>
+          <div className="space-y-4">
+            <Button type="submit" className="w-full">
+              {isPlayerCreator ? "Update Player" : "Add Player"}
+            </Button>
+            {isPlayerCreator && (
+              <Button
+                type="button"
+                onClick={handleDelete}
+                className="w-full bg-red-600 hover:bg-red-700 text-white"
+              >
+                Delete Player
+              </Button>
+            )}
+          </div>
         </form>
       </CardContent>
     </Card>

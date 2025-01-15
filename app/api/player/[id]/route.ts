@@ -104,3 +104,42 @@ export const PATCH = async (
     });
   }
 };
+
+export const DELETE = async (
+  request: Request,
+  { params }: { params: { id: string } }
+) => {
+  try {
+    await connectToDB();
+
+    const player = await Player.findByIdAndDelete(params.id);
+
+    if (!player) {
+      return new Response(JSON.stringify({ error: "Player not found" }), {
+        status: 404,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+    }
+
+    return new Response(
+      JSON.stringify({ message: "Player deleted successfully" }),
+      {
+        status: 200,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+  } catch (error) {
+    console.error("Error deleting player:", error);
+
+    return new Response(JSON.stringify({ error: "Failed to delete player" }), {
+      status: 500,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  }
+};
