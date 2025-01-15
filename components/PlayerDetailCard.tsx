@@ -1,19 +1,15 @@
-import Image, { StaticImageData } from "next/image";
+import Image from "next/image";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Briefcase, MapPin, User, Trophy } from "lucide-react";
 
 interface PlayerDetailProps {
   name: string;
-  imageUrl: StaticImageData | string;
+  imageUrl: string;
   club: string;
   country: string;
   position: string;
   age: number;
-  publisher: {
-    name: string;
-    avatarUrl: string;
-  };
   description: string;
   history: string;
   career: string;
@@ -27,7 +23,7 @@ export function PlayerDetailCard({
   country,
   position,
   age,
-  publisher,
+
   description,
   history,
   career,
@@ -95,11 +91,11 @@ export function PlayerDetailCard({
           <h2 className="text-xl font-semibold mb-4">Published by</h2>
           <div className="flex items-center gap-4">
             <Avatar className="h-12 w-12">
-              <AvatarImage src={publisher.avatarUrl} alt={publisher.name} />
-              <AvatarFallback>{publisher.name.charAt(0)}</AvatarFallback>
+              <AvatarImage src={imageUrl} alt={name} />
+              <AvatarFallback>{name.charAt(0)}</AvatarFallback>
             </Avatar>
             <div>
-              <p className="font-medium">{publisher.name}</p>
+              <p className="font-medium">OSIRIS MIGAN</p>
               <p className="text-sm text-muted-foreground">Football Analyst</p>
             </div>
           </div>
