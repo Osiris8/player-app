@@ -1,4 +1,4 @@
-import Image, { StaticImageData } from "next/image";
+import Image from "next/image";
 import {
   Card,
   CardContent,
@@ -11,15 +11,11 @@ import { Briefcase, MapPin, User } from "lucide-react";
 
 interface PlayerCardProps {
   name: string;
-  imageUrl: StaticImageData | string;
+  imageUrl: string;
   club: string;
   country: string;
   position: string;
   age: number;
-  publisher: {
-    name: string;
-    avatarUrl: string;
-  };
 }
 
 export default function PlayerCard({
@@ -29,7 +25,6 @@ export default function PlayerCard({
   country,
   position,
   age,
-  publisher,
 }: PlayerCardProps) {
   return (
     <div className="transition-all hover:shadow-lg">
@@ -73,12 +68,12 @@ export default function PlayerCard({
         <CardFooter className="border-t bg-muted/50 p-4">
           <div className="flex items-center gap-3">
             <Avatar>
-              <AvatarImage src={publisher.avatarUrl} alt={publisher.name} />
-              <AvatarFallback>{publisher.name.charAt(0)}</AvatarFallback>
+              <AvatarImage src={imageUrl} alt={name} />
+              <AvatarFallback>{name.charAt(0)}</AvatarFallback>
             </Avatar>
             <div>
               <p className="text-sm font-bold">Published by</p>
-              <p className="text-xs text-muted-foreground">{publisher.name}</p>
+              <p className="text-xs text-muted-foreground">Osiris MIGAN</p>
             </div>
           </div>
         </CardFooter>
