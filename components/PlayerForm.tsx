@@ -64,7 +64,7 @@ export default function PlayerForm({ initialData }: PlayerFormProps) {
           try {
             const response = await fetch(`/api/player/${playerId}`);
             if (!response.ok) {
-              throw new Error("Unable to fetch player data");
+              console.log("Unable to fetch player data");
             }
             const data = await response.json();
 
@@ -149,7 +149,7 @@ export default function PlayerForm({ initialData }: PlayerFormProps) {
       }
 
       alert("Player deleted successfully.");
-      router.push("/players"); // Rediriger vers la liste des joueurs
+      router.push("/"); // Rediriger vers la liste des joueurs
     } catch (error) {
       console.error("Error deleting player:", error);
       alert("An error occurred while deleting the player.");

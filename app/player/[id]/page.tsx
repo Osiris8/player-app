@@ -39,7 +39,7 @@ export default function Home() {
 
     const fetchPlayer = async () => {
       try {
-        setLoading(true); // Démarrage du chargement
+        setLoading(true); // Loading
         const response = await fetch(`/api/player/${playerId}`);
         if (!response.ok) {
           const errorData = await response.json();
