@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Briefcase, MapPin, User, Trophy } from "lucide-react";
+import { Briefcase, MapPin, User, Trophy, Calendar } from "lucide-react";
 
 interface PlayerDetailProps {
   name: string;
@@ -56,22 +56,20 @@ export function PlayerDetailCard({
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-          <div className="flex items-center gap-2">
-            <User className="h-5 w-5 text-muted-foreground" />
-            <span>{position}</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="text-muted-foreground">Age:</span>
-            <span>{age} years</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <Trophy className="h-5 w-5 text-muted-foreground" />
-            <span>{goals} career goals</span>
-          </div>
+        <div className="flex items-center gap-2">
+          <User className="h-5 w-5 text-muted-foreground" />
+          <span>{position}</span>
+        </div>
+        <div className="flex items-center gap-2 mt-4">
+          <Calendar className="h-5 w-5 text-muted-foreground" />
+          <span>{age} years</span>
+        </div>
+        <div className="flex items-center gap-2 mt-4">
+          <Trophy className="h-5 w-5 text-muted-foreground" />
+          <span>{goals} career goals</span>
         </div>
 
-        <div className="mb-6">
+        <div className="mb-6 mt-4">
           <h2 className="text-xl font-semibold mb-2">About {name}</h2>
           <p className="text-muted-foreground">{description}</p>
         </div>
