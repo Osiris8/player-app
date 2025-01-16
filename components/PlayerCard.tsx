@@ -1,12 +1,6 @@
 import Image from "next/image";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardFooter,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Briefcase, MapPin, User } from "lucide-react";
 
 interface PlayerCardProps {
@@ -65,18 +59,6 @@ export default function PlayerCard({
             {age} years old
           </div>
         </CardContent>
-        <CardFooter className="border-t bg-muted/50 p-4">
-          <div className="flex items-center gap-3">
-            <Avatar>
-              <AvatarImage src={imageUrl} alt={name} />
-              <AvatarFallback>{name.charAt(0)}</AvatarFallback>
-            </Avatar>
-            <div>
-              <p className="text-sm font-bold">Published by</p>
-              <p className="text-xs text-muted-foreground">Osiris MIGAN</p>
-            </div>
-          </div>
-        </CardFooter>
       </Card>
     </div>
   );

@@ -7,6 +7,7 @@ import {
 
 export default function Navbar() {
   const { isAuthenticated, user } = useKindeBrowserClient();
+  console.log(user);
 
   return (
     <div className="navbar bg-white">
