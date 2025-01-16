@@ -20,13 +20,13 @@ export default function Home() {
   const [players, setPlayers] = useState<Player[]>([]);
   const { user } = useKindeBrowserClient();
   useEffect(() => {
-    if (!user?.id) return; // Ne pas effectuer le fetch si user.id est vide
+    if (!user?.id) return; // not fetch if user?.id is unavailable
 
     const fetchPlayers = async () => {
       try {
-        const response = await fetch(`/api/player/${user.id}`);
+        const response = await fetch(`/api/player/${user?.id}`);
         if (!response.ok) {
-          throw new Error("Failed to fetch players");
+          console.log("Failed to fetch players");
         }
         const data = await response.json();
         setPlayers(data);
