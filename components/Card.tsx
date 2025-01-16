@@ -17,7 +17,7 @@ interface Player {
 
 export default function Card() {
   const [players, setPlayers] = useState<Player[]>([]);
-
+  const [searchQuery, setSearchQuery] = useState<string>("");
   useEffect(() => {
     const fetchPlayers = async () => {
       try {
@@ -34,15 +34,18 @@ export default function Card() {
 
     fetchPlayers();
   }, []);
+  const filteredPlayers = players.filter((player) =>
+    player.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-8 text-center">Featured Players</h1>
       <div className="mb-6 max-w-md mx-auto">
-        <Search />
+        <Search setSearchQuery={setSearchQuery} />
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {players.map((player) =>
+        {filteredPlayers.map((player) =>
           player._id ? (
             <Link
               key={player._id}

@@ -123,7 +123,7 @@ export default function PlayerForm({ initialData }: PlayerFormProps) {
       // Redirection after success
       router.push(`/player/${data._id}`); // use ID of API
     } catch (error) {
-      console.error("Error to send the form :", error);
+      console.log("Error to send the form :", error);
       alert("Error, please to resend.");
     }
   };
@@ -151,7 +151,7 @@ export default function PlayerForm({ initialData }: PlayerFormProps) {
       alert("Player deleted successfully.");
       router.push("/"); // Redirection home page
     } catch (error) {
-      console.error("Error deleting player:", error);
+      console.log("Error deleting player:", error);
       alert("An error occurred while deleting the player.");
     }
   };

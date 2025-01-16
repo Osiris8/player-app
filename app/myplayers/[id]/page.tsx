@@ -18,6 +18,7 @@ interface Player {
 }
 export default function Home() {
   const [players, setPlayers] = useState<Player[]>([]);
+  const [searchQuery, setSearchQuery] = useState<string>("");
   const { user } = useKindeBrowserClient();
   useEffect(() => {
     if (!user?.id) return; // not fetch if user?.id is unavailable
@@ -37,7 +38,9 @@ export default function Home() {
 
     fetchPlayers();
   }, [user?.id]);
-
+  const filteredPlayers = players.filter((player) =>
+    player.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
   return (
     <div data-theme="elegant">
       <Navbar />
@@ -47,14 +50,14 @@ export default function Home() {
           Featured Players
         </h1>
         <div className="mb-6 max-w-md mx-auto">
-          <Search />
+          <Search setSearchQuery={setSearchQuery} />
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {players.map((player) =>
+          {filteredPlayers.map((player) =>
             player._id ? (
               <Link
                 key={player._id}
-                href={`/player/${player._id}`}
+                href={`/player/detail/${player._id}`}
                 className="block hover:no-underline"
               >
                 <PlayerCard {...player} />

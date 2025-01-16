@@ -1,7 +1,18 @@
-export default function Search() {
+interface SearchProps {
+  setSearchQuery: (query: string) => void;
+}
+export default function Search({ setSearchQuery }: SearchProps) {
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(event.target.value);
+  };
   return (
     <label className="input input-bordered flex items-center gap-2">
-      <input type="text" className="w-96" placeholder="Search" />
+      <input
+        type="text"
+        className="w-96"
+        placeholder="Search"
+        onChange={handleInputChange}
+      />
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 16 16"
