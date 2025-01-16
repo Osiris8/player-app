@@ -32,13 +32,15 @@ export function PlayerDetailCard({
     <Card className="w-full max-w-4xl mx-auto overflow-hidden">
       <CardHeader className="p-0">
         <div className="relative h-64 md:h-96 w-full">
-          <Image
-            src={imageUrl}
-            alt={name}
-            layout="fill"
-            objectFit="cover"
-            priority
-          />
+          {imageUrl && (
+            <Image
+              src={imageUrl}
+              alt={name}
+              layout="fill"
+              objectFit="cover"
+              priority
+            />
+          )}
         </div>
       </CardHeader>
       <CardContent className="p-6">

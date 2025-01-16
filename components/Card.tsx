@@ -46,7 +46,7 @@ export default function Card() {
           player._id ? (
             <Link
               key={player._id}
-              href={`/player/${player._id}`}
+              href={`/player/detail/${player._id}`}
               className="block hover:no-underline"
             >
               <PlayerCard {...player} />

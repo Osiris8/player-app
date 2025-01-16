@@ -22,10 +22,7 @@ export default function Home() {
     country: "",
     position: "",
     age: 0,
-    publisher: {
-      name: "",
-      avatarUrl: "",
-    },
+
     description: "",
     history: "",
     career: "",
@@ -40,10 +37,10 @@ export default function Home() {
     const fetchPlayer = async () => {
       try {
         setLoading(true); // Loading
-        const response = await fetch(`/api/player/${playerId}`);
+        const response = await fetch(`/api/players/${playerId}`);
         if (!response.ok) {
           const errorData = await response.json();
-          throw new Error(errorData.error || "Failed to fetch player data");
+          console.log(errorData.error || "Failed to fetch player data");
         }
 
         const data = await response.json();
@@ -56,10 +53,7 @@ export default function Home() {
           country: data.country || "",
           position: data.position || "",
           age: data.age || 0,
-          publisher: {
-            name: data.publisher?.name || "",
-            avatarUrl: data.publisher?.avatarUrl || "",
-          },
+
           description: data.description || "",
           history: data.history || "",
           career: data.career || "",
