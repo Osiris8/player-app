@@ -4,6 +4,7 @@ import {
   RegisterLink,
   LoginLink,
 } from "@kinde-oss/kinde-auth-nextjs/components";
+import Link from "next/link";
 
 export default function Navbar() {
   const { isAuthenticated, user } = useKindeBrowserClient();
@@ -60,11 +61,15 @@ export default function Navbar() {
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1 text-neutral">
           <li>
-            <a className="hover:text-primary">Home</a>
+            <Link href="/" className="hover:text-primary">
+              Home
+            </Link>
           </li>
 
           <li>
-            <a className="hover:text-primary">About</a>
+            <Link href="/about" className="hover:text-primary">
+              About
+            </Link>
           </li>
         </ul>
       </div>
@@ -89,10 +94,13 @@ export default function Navbar() {
               className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
             >
               <li>
-                <a>Add New Player</a>
+                <Link href="/player/add">Add New Player</Link>
               </li>
               <li>
-                <a>Logout</a>
+                <Link href="/api/auth/logout ">Logout</Link>
+              </li>
+              <li>
+                <Link href={`/myplayers/${user?.id}`}>My Players</Link>
               </li>
             </ul>
           </div>
