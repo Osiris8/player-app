@@ -59,7 +59,7 @@ export const PATCH = async (
       goals,
     } = await request.json();
 
-    // Chercher le joueur existant ou renvoyer une erreur
+    // Search the player
     const player = await Player.findById(params.id);
 
     if (!player) {

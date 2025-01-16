@@ -65,14 +65,14 @@ export default function Home() {
         if ((data.userId = userId)) {
           console.log(data.userId);
           console.log(data._id);
-          setIsPlayerCreator(true); // Définir si l'utilisateur est le créateur
+          setIsPlayerCreator(true);
         } else {
           setIsPlayerCreator(false);
         }
       } catch (err) {
         console.log(err);
       } finally {
-        setLoading(false); // Fin du chargement
+        setLoading(false); // End to loading
       }
     };
 

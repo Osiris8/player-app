@@ -7,7 +7,7 @@ body {
 }
 
 .bg-hero {
-  background-image: url("../public/images/bayern.jpg"); /* Remplace par le chemin de ton image */
+  background-image: url("../public/images/bayern.jpg");
 }
 
 @layer base {

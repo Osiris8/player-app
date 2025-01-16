@@ -120,10 +120,10 @@ export default function PlayerForm({ initialData }: PlayerFormProps) {
       const data = await response.json();
       console.log("Form submitted successfully:", data);
 
-      // Redirection après succès
-      router.push(`/player/${data._id}`); // Utilisez l'ID retourné par l'API
+      // Redirection after success
+      router.push(`/player/${data._id}`); // use ID of API
     } catch (error) {
-      console.error("Error to seend the form :", error);
+      console.error("Error to send the form :", error);
       alert("Error, please to resend.");
     }
   };
@@ -149,7 +149,7 @@ export default function PlayerForm({ initialData }: PlayerFormProps) {
       }
 
       alert("Player deleted successfully.");
-      router.push("/"); // Rediriger vers la liste des joueurs
+      router.push("/"); // Redirection home page
     } catch (error) {
       console.error("Error deleting player:", error);
       alert("An error occurred while deleting the player.");

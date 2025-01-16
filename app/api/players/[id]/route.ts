@@ -8,7 +8,7 @@ export const GET = async (
   try {
     await connectToDB();
 
-    // Recherche d'un joueur par son ID
+    // Search player by ID
     const player = await Player.findById(params.id);
 
     if (!player) {
