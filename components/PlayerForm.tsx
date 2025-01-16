@@ -114,7 +114,7 @@ export default function PlayerForm({ initialData }: PlayerFormProps) {
       });
 
       if (!response.ok) {
-        throw new Error("Error to send data.");
+        console.log("Error to send data.");
       }
 
       const data = await response.json();
@@ -145,7 +145,7 @@ export default function PlayerForm({ initialData }: PlayerFormProps) {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to delete player.");
+        console.log("Failed to delete player.");
       }
 
       alert("Player deleted successfully.");
