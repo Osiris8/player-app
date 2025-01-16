@@ -1,6 +1,5 @@
 import Image from "next/image";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Briefcase, MapPin, User, Trophy } from "lucide-react";
 
 interface PlayerDetailProps {
@@ -85,20 +84,6 @@ export function PlayerDetailCard({
         <div className="mb-6">
           <h2 className="text-xl font-semibold mb-2">Career Highlights</h2>
           <p className="text-muted-foreground">{career}</p>
-        </div>
-
-        <div className="border-t pt-6">
-          <h2 className="text-xl font-semibold mb-4">Published by</h2>
-          <div className="flex items-center gap-4">
-            <Avatar className="h-12 w-12">
-              <AvatarImage src={imageUrl} alt={name} />
-              <AvatarFallback>{name.charAt(0)}</AvatarFallback>
-            </Avatar>
-            <div>
-              <p className="font-medium">OSIRIS MIGAN</p>
-              <p className="text-sm text-muted-foreground">Football Analyst</p>
-            </div>
-          </div>
         </div>
       </CardContent>
     </Card>
