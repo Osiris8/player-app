@@ -6,6 +6,7 @@ import PlayerCard from "@/components/PlayerCard";
 import Search from "@/components/Search";
 import { useState, useEffect } from "react";
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
+import { useRouter } from "next/navigation";
 
 interface Player {
   _id: string;
@@ -20,6 +21,7 @@ export default function Home() {
   const [players, setPlayers] = useState<Player[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const { user } = useKindeBrowserClient();
+  const router = useRouter();
   useEffect(() => {
     if (!user?.id) return; // not fetch if user?.id is unavailable
 
@@ -28,11 +30,25 @@ export default function Home() {
         const response = await fetch(`/api/player/${user?.id}`);
         if (!response.ok) {
           console.log("Failed to fetch players");
+          router.push("/error");
+          return;
         }
+
         const data = await response.json();
-        setPlayers(data);
+        console.log("API response: ", data);
+
+        if (Array.isArray(data)) {
+          setPlayers(data);
+        } else if (data && typeof data === "object") {
+          setPlayers([]);
+          console.error("Unexpected data format: Object instead of Array");
+        } else {
+          console.error("Unexpected data format: ", data);
+          router.push("/error");
+        }
       } catch (error) {
         console.error(error);
+        router.push("/error");
       }
     };
 

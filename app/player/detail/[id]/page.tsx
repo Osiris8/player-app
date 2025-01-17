@@ -31,19 +31,22 @@ export default function Home() {
 
   useEffect(() => {
     const playerId = `${pathname}`.split("/").pop();
+    console.log(pathname);
     console.log(playerId);
     if (!playerId) return;
 
     const fetchPlayer = async () => {
       try {
         setLoading(true); // Loading
+
         const response = await fetch(`/api/players/${playerId}`);
         if (!response.ok) {
           const errorData = await response.json();
           console.log(errorData.error || "Failed to fetch player data");
         }
 
-        const data = await response.json();
+        const player = await response.json();
+        const data = player[0];
         console.log(data);
         setPlayerData({
           id: data._id,
@@ -66,8 +69,6 @@ export default function Home() {
           console.log(data.userId);
           console.log(data._id);
           setIsPlayerCreator(true);
-        } else {
-          setIsPlayerCreator(false);
         }
       } catch (err) {
         console.log(err);

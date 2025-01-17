@@ -62,12 +62,13 @@ export default function PlayerForm({ initialData }: PlayerFormProps) {
       if (playerId) {
         const fetchPlayerData = async () => {
           try {
-            const response = await fetch(`/api/player/${playerId}`);
+            const response = await fetch(`/api/players/${playerId}`);
             if (!response.ok) {
               console.log("Unable to fetch player data");
             }
-            const data = await response.json();
-
+            const player = await response.json();
+            const data = player[0];
+            console.log(data);
             // Vérify if the creator exist
             if (data.userId === user?.id) {
               setFormData(data); // Pre-fill fields if creator
@@ -121,7 +122,7 @@ export default function PlayerForm({ initialData }: PlayerFormProps) {
       console.log("Form submitted successfully:", data);
 
       // Redirection after success
-      router.push(`/player/${data._id}`); // use ID of API
+      router.push(`/player/detail/${data._id}`); // use ID of API
     } catch (error) {
       console.log("Error to send the form :", error);
       alert("Error, please to resend.");

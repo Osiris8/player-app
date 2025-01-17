@@ -39,7 +39,7 @@ export default function Card() {
   );
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-8" id="players">
       <h1 className="text-3xl font-bold mb-8 text-center">Featured Players</h1>
       <div className="mb-6 max-w-md mx-auto">
         <Search setSearchQuery={setSearchQuery} />

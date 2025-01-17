@@ -35,11 +35,15 @@ export default function Navbar() {
             className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
           >
             <li>
-              <a className="hover:text-primary">Home</a>
+              <Link href="/" className="hover:text-primary">
+                Home
+              </Link>
             </li>
 
             <li>
-              <a className="hover:text-primary">About</a>
+              <Link href="/#players" className="hover:text-primary">
+                Players
+              </Link>
             </li>
           </ul>
         </div>
@@ -67,8 +71,8 @@ export default function Navbar() {
           </li>
 
           <li>
-            <Link href="/about" className="hover:text-primary">
-              About
+            <Link href="/#players" className="hover:text-primary">
+              Players
             </Link>
           </li>
         </ul>

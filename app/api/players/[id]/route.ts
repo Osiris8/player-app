@@ -8,11 +8,10 @@ export const GET = async (
   try {
     await connectToDB();
 
-    // Search player by ID
-    const player = await Player.findById(params.id);
+    const players = await Player.find({ _id: params.id });
 
-    if (!player) {
-      return new Response(JSON.stringify({ error: "Player not found" }), {
+    if (!players || players.length === 0) {
+      return new Response(JSON.stringify({ error: "No players found" }), {
         status: 404,
         headers: {
           "Content-Type": "application/json",
@@ -20,14 +19,14 @@ export const GET = async (
       });
     }
 
-    return new Response(JSON.stringify(player), {
+    return new Response(JSON.stringify(players), {
       status: 200,
       headers: {
         "Content-Type": "application/json",
       },
     });
   } catch (error) {
-    console.error("Error fetching player:", error);
+    console.error("Error fetching players:", error);
     return new Response(
       JSON.stringify({ error: "Failed to fetch player data" }),
       {
