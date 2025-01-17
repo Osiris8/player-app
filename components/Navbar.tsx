@@ -8,7 +8,6 @@ import Link from "next/link";
 
 export default function Navbar() {
   const { isAuthenticated, user } = useKindeBrowserClient();
-  console.log(user);
 
   return (
     <div className="navbar bg-white">

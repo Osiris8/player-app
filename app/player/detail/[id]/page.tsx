@@ -22,7 +22,7 @@ export default function Home() {
     country: "",
     position: "",
     age: 0,
-
+    userId: "",
     description: "",
     history: "",
     career: "",
@@ -56,7 +56,7 @@ export default function Home() {
           country: data.country || "",
           position: data.position || "",
           age: data.age || 0,
-
+          userId: data.userId || "",
           description: data.description || "",
           history: data.history || "",
           career: data.career || "",
@@ -65,7 +65,7 @@ export default function Home() {
         setError(null);
         //Verify the creator of player
         const userId = user?.id;
-        if ((data.userId = userId)) {
+        if (data.userId === userId) {
           console.log(data.userId);
           console.log(data._id);
           setIsPlayerCreator(true);

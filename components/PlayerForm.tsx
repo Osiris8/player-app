@@ -38,7 +38,7 @@ export default function PlayerForm({ initialData }: PlayerFormProps) {
   const [isPlayerCreator, setIsPlayerCreator] = useState(false);
   const [formData, setFormData] = useState(
     initialData || {
-      userId: user?.id,
+      userId: "",
       name: "",
       imageUrl: "",
       club: "",
@@ -70,12 +70,13 @@ export default function PlayerForm({ initialData }: PlayerFormProps) {
             const data = player[0];
             console.log(data);
             // Vérify if the creator exist
+
             if (data.userId === user?.id) {
               setFormData(data); // Pre-fill fields if creator
               setIsPlayerCreator(true);
             }
           } catch (err) {
-            console.error(err);
+            console.log(err);
           }
         };
 
@@ -125,7 +126,7 @@ export default function PlayerForm({ initialData }: PlayerFormProps) {
       router.push(`/player/detail/${data._id}`); // use ID of API
     } catch (error) {
       console.log("Error to send the form :", error);
-      alert("Error, please to resend.");
+      alert("Error, please to connect you.");
     }
   };
 
