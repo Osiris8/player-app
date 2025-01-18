@@ -40,8 +40,8 @@ export const POST = async (request: Request) => {
     //return response
     return new Response(JSON.stringify(newPlayer), { status: 201 });
   } catch (error) {
-    console.error("Erreur lors de la création d'un joueur :", error);
-    return new Response("Échec de la création du joueur", { status: 500 });
+    console.error("Error to create a player :", error);
+    return new Response("Error to create a player", { status: 500 });
   }
 };
 
