@@ -1,8 +1,9 @@
 import Player from "@/models/player";
 import { connectToDB } from "@/lib/database";
+import { NextRequest } from "next/server";
 
 export const GET = async (
-  request: Request,
+  req: NextRequest,
   { params }: { params: { id: string } }
 ) => {
   try {
@@ -21,9 +22,7 @@ export const GET = async (
 
     return new Response(JSON.stringify(players), {
       status: 200,
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
     });
   } catch (error) {
     console.error("Error fetching players:", error);
@@ -31,14 +30,11 @@ export const GET = async (
       JSON.stringify({ error: "Failed to fetch player data" }),
       {
         status: 500,
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
       }
     );
   }
 };
-
 export const PATCH = async (
   request: Request,
   { params }: { params: { id: string } }
