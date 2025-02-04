@@ -53,7 +53,7 @@ export default function Home() {
     };
 
     fetchPlayers();
-  }, [user?.id]);
+  }, [user?.id, router]);
   const filteredPlayers = players.filter((player) =>
     player.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
