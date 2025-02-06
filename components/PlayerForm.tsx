@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+
 import {
   Select,
   SelectContent,
@@ -14,6 +15,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+
+import { useEdgeStore } from "@/lib/edgestore";
 
 interface PlayerFormProps {
   initialData?: {
@@ -36,6 +39,8 @@ export default function PlayerForm({ initialData }: PlayerFormProps) {
   const router = useRouter();
   const pathname = usePathname();
   const [isPlayerCreator, setIsPlayerCreator] = useState(false);
+  const [file, setFile] = useState<File | null>(null);
+  const { edgestore } = useEdgeStore();
   const [formData, setFormData] = useState(
     initialData || {
       userId: "",
@@ -88,8 +93,16 @@ export default function PlayerForm({ initialData }: PlayerFormProps) {
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    const { name, value, type } = e.target;
+
+    if (type === "file") {
+      const selectedFile = (e.target as HTMLInputElement).files?.[0];
+      if (selectedFile) {
+        setFile(selectedFile); // Save temporary field
+      }
+    } else {
+      setFormData((prev) => ({ ...prev, [name]: value }));
+    }
   };
 
   const handleSelectChange = (name: string) => (value: string) => {
@@ -100,33 +113,44 @@ export default function PlayerForm({ initialData }: PlayerFormProps) {
     e.preventDefault();
 
     try {
+      let imageUrl = formData.imageUrl;
+
+      //Upload file
+      if (file) {
+        const uploadResponse = await edgestore.publicFiles.upload({
+          file,
+          onProgressChange: (progress) =>
+            console.log(`Upload Progress: ${progress}%`),
+        });
+
+        imageUrl = uploadResponse.url; // Update image URL
+        setFormData((prev) => ({ ...prev, imageUrl }));
+      }
+
+      // Send the Data
       const playerId = pathname.split("/").pop();
       const endpoint = isPlayerCreator
-        ? `/api/player/${playerId}` // Modification if the creator exist
-        : "/api/player"; // Creation if not
-
+        ? `/api/player/${playerId}`
+        : "/api/player";
       const method = isPlayerCreator ? "PATCH" : "POST";
 
       const response = await fetch(endpoint, {
         method,
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...formData, imageUrl }),
       });
 
       if (!response.ok) {
         console.log("Error to send data.");
+        return;
       }
 
       const data = await response.json();
       console.log("Form submitted successfully:", data);
-
-      // Redirection after success
-      router.push(`/player/detail/${data._id}`); // use ID of API
+      router.push(`/player/detail/${data._id}`);
     } catch (error) {
-      console.log("Error to send the form :", error);
-      alert("Error, please to connect you.");
+      console.log("Error to send the form:", error);
+      alert("Error, please connect yourself.");
     }
   };
 
@@ -181,11 +205,10 @@ export default function PlayerForm({ initialData }: PlayerFormProps) {
             <div className="space-y-2">
               <Label htmlFor="imageUrl">Image URL</Label>
               <Input
-                id="imageUrl"
-                name="imageUrl"
-                value={formData.imageUrl}
+                id="image"
+                type="file"
+                accept="image/*"
                 onChange={handleChange}
-                required
               />
             </div>
             <div className="space-y-2">
