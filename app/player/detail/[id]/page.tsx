@@ -39,7 +39,7 @@ export default function Home() {
       try {
         setLoading(true); // Loading
 
-        const response = await fetch(`/api/players/${playerId}`);
+        const response = await fetch(`/api/player/${playerId}`);
         if (!response.ok) {
           const errorData = await response.json();
           console.log(errorData.error || "Failed to fetch player data");
