@@ -67,7 +67,7 @@ export default function PlayerForm({ initialData }: PlayerFormProps) {
       if (playerId) {
         const fetchPlayerData = async () => {
           try {
-            const response = await fetch(`/api/players/${playerId}`);
+            const response = await fetch(`/api/player/${playerId}`);
             if (!response.ok) {
               console.log("Unable to fetch player data");
             }
