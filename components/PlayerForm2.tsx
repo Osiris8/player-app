@@ -1,13 +1,7 @@
 "use client";
-import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
-import { useState, useEffect } from "react";
-import { useRouter, usePathname } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-
 import {
   Select,
   SelectContent,
@@ -15,9 +9,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
-import { useEdgeStore } from "@/lib/edgestore";
-
+import { Textarea } from "@/components/ui/textarea";
+import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 interface PlayerFormProps {
   initialData?: {
     userId: string;
@@ -30,17 +23,19 @@ interface PlayerFormProps {
     description: string;
     history: string;
     career: string;
-    goals: number;
+    goals: string;
   };
 }
-
+import { useEdgeStore } from "@/lib/edgestore";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { Button } from "./ui/button";
 export default function PlayerForm({ initialData }: PlayerFormProps) {
   const { user } = useKindeBrowserClient();
-  const router = useRouter();
-  const pathname = usePathname();
-  const [isPlayerCreator, setIsPlayerCreator] = useState(false);
+  console.log(user);
   const [file, setFile] = useState<File | null>(null);
   const { edgestore } = useEdgeStore();
+  const router = useRouter();
   const [formData, setFormData] = useState(
     initialData || {
       userId: "",
@@ -58,37 +53,11 @@ export default function PlayerForm({ initialData }: PlayerFormProps) {
   );
 
   useEffect(() => {
-    // Update UserId if it's available
     if (user?.id) {
       setFormData((prev) => ({ ...prev, userId: user.id }));
-
-      const playerId = pathname.split("/").pop();
-
-      if (playerId) {
-        const fetchPlayerData = async () => {
-          try {
-            const response = await fetch(`/api/players/${playerId}`);
-            if (!response.ok) {
-              console.log("Unable to fetch player data");
-            }
-            const player = await response.json();
-            const data = player[0];
-            console.log(data);
-            // Vérify if the creator exist
-
-            if (data.userId === user?.id) {
-              setFormData(data); // Pre-fill fields if creator
-              setIsPlayerCreator(true);
-            }
-          } catch (err) {
-            console.log(err);
-          }
-        };
-
-        fetchPlayerData();
-      }
+      console.log(formData);
     }
-  }, [user?.id, pathname]);
+  }, [user]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -98,7 +67,7 @@ export default function PlayerForm({ initialData }: PlayerFormProps) {
     if (type === "file") {
       const selectedFile = (e.target as HTMLInputElement).files?.[0];
       if (selectedFile) {
-        setFile(selectedFile); // Save temporary field
+        setFile(selectedFile);
       }
     } else {
       setFormData((prev) => ({ ...prev, [name]: value }));
@@ -115,79 +84,43 @@ export default function PlayerForm({ initialData }: PlayerFormProps) {
     try {
       let imageUrl = formData.imageUrl;
 
-      //Upload file
       if (file) {
         const uploadResponse = await edgestore.publicFiles.upload({
           file,
-          onProgressChange: (progress) =>
-            console.log(`Upload Progress: ${progress}%`),
+          onProgressChange: (progress) => {
+            // you can use this to show a progress bar
+            console.log(progress);
+          },
         });
+        imageUrl = uploadResponse.url;
 
-        imageUrl = uploadResponse.url; // Update image URL
         setFormData((prev) => ({ ...prev, imageUrl }));
       }
-
-      // Send the Data
-      const playerId = pathname.split("/").pop();
-      const endpoint = isPlayerCreator
-        ? `/api/player/${playerId}`
-        : "/api/player";
-      const method = isPlayerCreator ? "PATCH" : "POST";
-
-      const response = await fetch(endpoint, {
-        method,
-        headers: { "Content-Type": "application/json" },
+      const response = await fetch("/api/player", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({ ...formData, imageUrl }),
       });
-
       if (!response.ok) {
-        console.log("Error to send data.");
+        console.log("Error to send Data");
+        console.log(formData);
         return;
       }
 
       const data = await response.json();
-      console.log("Form submitted successfully:", data);
+      console.log("Form submitted successfully", data);
       router.push(`/player/detail/${data._id}`);
     } catch (error) {
-      console.log("Error to send the form:", error);
-      alert("Error, please connect yourself.");
+      console.log("Error to send the form", error);
+      alert("Error, please connect yourself");
     }
   };
-
-  const handleDelete = async () => {
-    const playerId = pathname.split("/").pop();
-    if (!playerId) return alert("Player ID is missing.");
-    if (!isPlayerCreator)
-      return alert("You are not authorized to delete this player.");
-
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this player?"
-    );
-    if (!confirmDelete) return;
-
-    try {
-      const response = await fetch(`/api/player/${playerId}`, {
-        method: "DELETE",
-      });
-
-      if (!response.ok) {
-        console.log("Failed to delete player.");
-      }
-
-      alert("Player deleted successfully.");
-      router.push("/"); // Redirection home page
-    } catch (error) {
-      console.log("Error deleting player:", error);
-      alert("An error occurred while deleting the player.");
-    }
-  };
-
   return (
     <Card className="w-full max-w-4xl mx-auto">
       <CardHeader>
-        <CardTitle className="text-2xl font-bold">
-          {isPlayerCreator ? "Edit Player" : "Add New Player"}
-        </CardTitle>
+        <CardTitle className="text-2xl font-bold">Add New Player</CardTitle>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -203,12 +136,13 @@ export default function PlayerForm({ initialData }: PlayerFormProps) {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="imageUrl">Image URL</Label>
+              <Label htmlFor="imageUrl">ImageUrl</Label>
               <Input
                 id="image"
                 type="file"
                 accept="image/*"
                 onChange={handleChange}
+                required
               />
             </div>
             <div className="space-y-2">
@@ -245,7 +179,7 @@ export default function PlayerForm({ initialData }: PlayerFormProps) {
                   <SelectItem value="Forward">Forward</SelectItem>
                   <SelectItem value="Midfielder">Midfielder</SelectItem>
                   <SelectItem value="Defender">Defender</SelectItem>
-                  <SelectItem value="Goalkeeper">Goalkeeper</SelectItem>
+                  <SelectItem value="GoalKeeper">GoalKeeper</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -305,19 +239,11 @@ export default function PlayerForm({ initialData }: PlayerFormProps) {
               required
             />
           </div>
-          <div className="space-y-4">
+          <div className="space-4">
             <Button type="submit" className="w-full">
-              {isPlayerCreator ? "Update Player" : "Add Player"}
+              {" "}
+              Add Player
             </Button>
-            {isPlayerCreator && (
-              <Button
-                type="button"
-                onClick={handleDelete}
-                className="w-full bg-red-600 hover:bg-red-700 text-white"
-              >
-                Delete Player
-              </Button>
-            )}
           </div>
         </form>
       </CardContent>

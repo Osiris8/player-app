@@ -1,9 +1,13 @@
 "use client";
 import PlayerCard from "@/components/PlayerCard";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
+import Search from "@/components/Search";
 import { useState, useEffect } from "react";
+import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
+import Link from "next/link";
+import Footer from "@/components/Footer";
+import Navbar from "@/components/Navbar";
+import { useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 interface Player {
   _id: string;
   name: string;
@@ -13,33 +17,28 @@ interface Player {
   position: string;
   age: number;
 }
-import { usePathname } from "next/navigation";
-import Search from "@/components/Search";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-
 export default function Card() {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [players, setPlayers] = useState<Player[]>([]);
+  const { user } = useKindeBrowserClient();
   const router = useRouter();
   const pathname = usePathname();
-  const { user } = useKindeBrowserClient();
   useEffect(() => {
-    const urlId = `${pathname}`.split("/").pop();
-    if (!urlId) return;
-    console.log(urlId);
+    const playerId = `${pathname}`.split("/").pop();
+    if (!playerId) return;
+    console.log(playerId);
     if (!user?.id) return;
     const fetchPlayers = async () => {
       try {
-        if (urlId === user?.id) {
-          const response = await fetch(`/api/myplayers/${urlId}`);
-          if (!response.ok) {
+        if (playerId === user?.id) {
+          const response = await fetch(`/api/myplayers/${playerId}`);
+          if (!response) {
             router.push("/error");
           }
 
           const data = await response.json();
-          console.log(data);
-          setPlayers(data);
+          console.log(data.player);
+          setPlayers(data.player);
         } else {
           router.push("/error");
         }
@@ -56,9 +55,7 @@ export default function Card() {
     <div>
       <Navbar />
       <div className="container mx-auto px-4 py-8" id="players">
-        <h1 className="text-3xl font-bold mb-8 text-center">
-          Featured Players
-        </h1>
+        <h1 className="text-3xl font-bold mb-8 text-center">My Players</h1>
         <div className="mb-6 max-w-md mx-auto">
           <Search setSearchQuery={setSearchQuery} />
         </div>

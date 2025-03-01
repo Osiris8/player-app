@@ -9,7 +9,7 @@ export const GET = async (
   try {
     await connectToDB();
 
-    const players = await Player.find({ userId: params.id });
+    const players = await Player.find({ _id: params.id });
 
     if (!players || players.length === 0) {
       return new Response(JSON.stringify({ error: "No players found" }), {
