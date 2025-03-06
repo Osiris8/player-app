@@ -4,12 +4,12 @@ import { NextRequest } from "next/server";
 
 export const GET = async (
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) => {
   try {
     await connectToDB();
-
-    const players = await Player.find({ _id: params.id });
+    const id = (await params).id;
+    const players = await Player.find({ _id: id });
 
     if (!players || players.length === 0) {
       return new Response(JSON.stringify({ error: "No players found" }), {
