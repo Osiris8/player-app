@@ -3,12 +3,12 @@ import { connectToDB } from "@/lib/database";
 
 export const GET = async (
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) => {
   try {
     await connectToDB();
-
-    const players = await Player.find({ userId: params.id });
+    const id = (await params).id;
+    const players = await Player.find({ userId: id });
 
     if (!players || players.length === 0) {
       return new Response(JSON.stringify({ error: "No players found" }), {
