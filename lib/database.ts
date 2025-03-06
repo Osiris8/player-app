@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 let isConnected = false; // track the connection
-
+const uri = process.env.MONGODB_URI as string; // your mongodb connection string
 export const connectToDB = async () => {
   mongoose.set("strictQuery", true);
 
@@ -11,10 +11,8 @@ export const connectToDB = async () => {
   }
 
   try {
-    await mongoose.connect(process.env.MONGODB_URI, {
+    await mongoose.connect(uri, {
       dbName: "playerapp",
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
     });
 
     isConnected = true;
