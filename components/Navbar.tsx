@@ -11,8 +11,10 @@ export default function Navbar() {
   const { isAuthenticated, user } = useKindeBrowserClient();
   const [isClient, setIsClient] = useState(false);
   useEffect(() => {
-    setIsClient(true);
-  }, []);
+    if (isAuthenticated) {
+      setIsClient(true);
+    }
+  }, [isAuthenticated]);
   return (
     <div className="navbar bg-white">
       <div className="navbar-start">
