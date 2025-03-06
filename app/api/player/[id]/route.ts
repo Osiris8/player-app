@@ -37,11 +37,11 @@ export const GET = async (
 };
 export const PATCH = async (
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) => {
   try {
     await connectToDB();
-
+    const id = (await params).id;
     const {
       name,
       imageUrl,
@@ -56,7 +56,7 @@ export const PATCH = async (
     } = await request.json();
 
     // Search the player
-    const player = await Player.findById(params.id);
+    const player = await Player.findById(id);
 
     if (!player) {
       return new Response(JSON.stringify({ error: "Player not found" }), {
