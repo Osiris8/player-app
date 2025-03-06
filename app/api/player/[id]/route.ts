@@ -102,12 +102,12 @@ export const PATCH = async (
 
 export const DELETE = async (
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) => {
   try {
     await connectToDB();
-
-    const player = await Player.findByIdAndDelete(params.id);
+    const id = (await params).id;
+    const player = await Player.findByIdAndDelete(id);
 
     if (!player) {
       return new Response(JSON.stringify({ error: "Player not found" }), {
