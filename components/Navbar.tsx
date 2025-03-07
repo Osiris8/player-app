@@ -9,16 +9,13 @@ import { useEffect, useState } from "react";
 export default function Navbar() {
   const { isAuthenticated, user } = useKindeBrowserClient();
   const [isClient, setIsClient] = useState(false);
-
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
-    console.log("isAuthenticated:", isAuthenticated);
-    console.log("user:", user);
-    if (isAuthenticated && user) {
-      setIsClient(true);
-    } else {
-      setIsClient(false);
+    if (isAuthenticated !== undefined) {
+      setIsClient(!!isAuthenticated);
+      setLoading(false);
     }
-  }, [isAuthenticated, user]);
+  }, [isAuthenticated]);
 
   console.log("isClient:", isClient);
 
@@ -89,7 +86,9 @@ export default function Navbar() {
           </li>
         </ul>
       </div>
-      {isClient ? (
+      {loading ? (
+        <span className="loading loading-spinner loading-md"></span> // Spinner
+      ) : isClient ? (
         <div className="navbar-end">
           <div className="dropdown dropdown-end">
             <div
