@@ -38,7 +38,13 @@ export const POST = async (request: Request) => {
     await newPlayer.save();
 
     //return response
-    return new Response(JSON.stringify(newPlayer), { status: 201 });
+    return new Response(JSON.stringify(newPlayer), {
+      status: 201,
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+    });
   } catch (error) {
     console.error("Error to create a player :", error);
     return new Response("Error to create a player", { status: 500 });
@@ -55,6 +61,10 @@ export const GET = async () => {
 
     return NextResponse.json(players, {
       status: 200,
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
     });
   } catch (error) {
     console.error("Failed to fetch players:", error);
@@ -65,4 +75,14 @@ export const GET = async () => {
       }
     );
   }
+};
+export const OPTIONS = async () => {
+  return new Response(null, {
+    status: 204,
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type, Authorization",
+    },
+  });
 };
