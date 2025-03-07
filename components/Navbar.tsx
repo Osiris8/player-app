@@ -11,10 +11,17 @@ export default function Navbar() {
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
+    console.log("isAuthenticated:", isAuthenticated);
+    console.log("user:", user);
     if (isAuthenticated && user) {
       setIsClient(true);
+    } else {
+      setIsClient(false);
     }
   }, [isAuthenticated, user]);
+
+  console.log("isClient:", isClient);
+
   return (
     <div className="navbar bg-white">
       <div className="navbar-start">
