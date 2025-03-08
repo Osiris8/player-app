@@ -9,12 +9,11 @@ import { useEffect, useState } from "react";
 export default function Navbar() {
   const { user } = useKindeBrowserClient();
   const [isClient, setIsClient] = useState(false);
-  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     const getUser = async () => {
       if (user && user.id) {
         setIsClient(true);
-        setLoading(false);
       }
     };
     getUser();
@@ -87,9 +86,7 @@ export default function Navbar() {
           </li>
         </ul>
       </div>
-      {loading ? (
-        <span className="loading loading-spinner loading-md"></span> // Spinner
-      ) : isClient ? (
+      {isClient ? (
         <div className="navbar-end">
           <div className="dropdown dropdown-end">
             <div
