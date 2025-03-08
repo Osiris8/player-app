@@ -1,13 +1,24 @@
+"use client";
+import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import {
   RegisterLink,
   LoginLink,
 } from "@kinde-oss/kinde-auth-nextjs/components";
-import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import Link from "next/link";
-
-export default async function Navbar() {
-  const { isAuthenticated, getUser } = getKindeServerSession();
-  const user = await getUser();
+import { useEffect, useState } from "react";
+export default function Navbar() {
+  const { user } = useKindeBrowserClient();
+  const [isClient, setIsClient] = useState(false);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const getUser = async () => {
+      if (user && user.id) {
+        setIsClient(true);
+        setLoading(false);
+      }
+    };
+    getUser();
+  }, [user]);
 
   return (
     <div className="navbar bg-white">
@@ -76,12 +87,9 @@ export default async function Navbar() {
           </li>
         </ul>
       </div>
-      {!(await isAuthenticated()) ? (
-        <div className="navbar-end">
-          <LoginLink className="btn btn-secondary mr-2"> Sign In</LoginLink>
-          <RegisterLink className="btn btn-primary"> Sign Up</RegisterLink>
-        </div>
-      ) : (
+      {loading ? (
+        <span className="loading loading-spinner loading-md"></span> // Spinner
+      ) : isClient ? (
         <div className="navbar-end">
           <div className="dropdown dropdown-end">
             <div
@@ -112,6 +120,11 @@ export default async function Navbar() {
               </li>
             </ul>
           </div>
+        </div>
+      ) : (
+        <div className="navbar-end">
+          <LoginLink className="btn btn-secondary mr-2"> Sign In</LoginLink>
+          <RegisterLink className="btn btn-primary"> Sign Up</RegisterLink>
         </div>
       )}
     </div>
