@@ -107,13 +107,13 @@ export default function Navbar() {
               className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
             >
               <li>
-                <Link href="/player/add">Add New Player</Link>
+                <a href="/player/add">Add New Player</a>
               </li>
               <li>
                 <Link href="/api/auth/logout">Logout</Link>
               </li>
               <li>
-                <Link href={`/myplayers/${user?.id}`}>My Players</Link>
+                <a href={`/myplayers/${user?.id}`}>My Players</a>
               </li>
             </ul>
           </div>
