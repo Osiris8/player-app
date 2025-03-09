@@ -87,7 +87,7 @@ export default function Navbar() {
           </li>
         </ul>
       </div>
-      {isAuthenticated ? (
+      {isAuthenticated && isClient ? (
         <div className="navbar-end">
           <div className="dropdown dropdown-end">
             <div
