@@ -1,11 +1,22 @@
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
-  /* config options here */
-  images: {
-    domains: ["media.ouest-france.fr", "files.edgestore.dev"], // Ajouter ici le domaine
+module.exports = {
+  experimental: {
+    appDir: true,
   },
-  reactStrictMode: true,
+  async headers() {
+    return [
+      {
+        source: "/(.*)",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "no-store, must-revalidate",
+          },
+          {
+            key: "Set-Cookie",
+            value: "SameSite=None; Secure",
+          },
+        ],
+      },
+    ];
+  },
 };
-
-export default nextConfig;
