@@ -7,18 +7,18 @@ import {
 import Link from "next/link";
 import { useEffect, useState } from "react";
 export default function Navbar() {
-  const { user, isAuthenticated } = useKindeBrowserClient();
+  const { user } = useKindeBrowserClient();
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
     const getUser = async () => {
       if (user && user.id) {
         setIsClient(true);
-        console.log(isAuthenticated);
+        console.log(user);
       }
     };
     getUser();
-  }, [user, isAuthenticated]);
+  }, [user]);
 
   return (
     <div className="navbar bg-white">
@@ -87,7 +87,7 @@ export default function Navbar() {
           </li>
         </ul>
       </div>
-      {isAuthenticated && isClient ? (
+      {user && isClient ? (
         <div className="navbar-end">
           <div className="dropdown dropdown-end">
             <div
