@@ -20,8 +20,6 @@ export default function Navbar() {
     getUser();
   }, [user, isAuthenticated]);
 
-  if (!isClient) return null;
-
   return (
     <div className="navbar bg-white">
       <div className="navbar-start">
