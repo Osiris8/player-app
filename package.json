@@ -9,7 +9,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@clerk/nextjs": "^6.12.4",
     "@edgestore/react": "^0.2.2",
     "@edgestore/server": "^0.2.2",
     "@kinde-oss/kinde-auth-nextjs": "^2.5.3",
