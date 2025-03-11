@@ -108,8 +108,12 @@ export default function Navbar() {
       ) : (
         <div className="navbar-end">
           <SignedOut>
-            <SignInButton className="btn btn-secondary mr-2" />
-            <SignUpButton className="btn btn-primary" />
+            <SignInButton>
+              <button className="btn btn-secondary mr-2">Sign In</button>
+            </SignInButton>
+            <SignUpButton>
+              <button className="btn btn-primary">Sign Up</button>
+            </SignUpButton>
           </SignedOut>
         </div>
       )}
