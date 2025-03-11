@@ -6,10 +6,10 @@ import { Button } from "@/components/ui/button";
 import { PlayerDetailCard } from "@/components/PlayerDetailCard";
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
-import { useAuth } from "@clerk/nextjs";
+import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 export default function Home() {
   const pathname = usePathname();
-  const { userId } = useAuth();
+  const { user } = useKindeBrowserClient();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isPlayerCreator, setIsPlayerCreator] = useState(false);
@@ -64,7 +64,7 @@ export default function Home() {
         });
         setError(null);
         //Verify the creator of player
-
+        const userId = user?.id;
         if (data.userId === userId) {
           console.log(data.userId);
           console.log(data._id);
@@ -78,7 +78,7 @@ export default function Home() {
     };
 
     fetchPlayer();
-  }, [pathname, userId]);
+  }, [pathname, user?.id]);
 
   if (loading) {
     return (

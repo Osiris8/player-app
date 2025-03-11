@@ -1,17 +1,23 @@
 "use client";
+import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import {
-  SignInButton,
-  SignUpButton,
-  SignedIn,
-  SignedOut,
-  UserButton,
-} from "@clerk/nextjs";
-import { useUser, useAuth } from "@clerk/nextjs";
+  RegisterLink,
+  LoginLink,
+} from "@kinde-oss/kinde-auth-nextjs/components";
 import Link from "next/link";
-
+import { useEffect, useState } from "react";
 export default function Navbar() {
-  const { user } = useUser();
-  const { userId } = useAuth();
+  const { user } = useKindeBrowserClient();
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    const getUser = async () => {
+      if (user && user.id) {
+        setIsClient(true);
+      }
+    };
+    getUser();
+  }, [user]);
 
   return (
     <div className="navbar bg-white">
@@ -48,16 +54,6 @@ export default function Navbar() {
                 Players
               </Link>
             </li>
-            <li>
-              <a href="/player/add">Add New Player</a>
-            </li>
-            {user ? (
-              <li>
-                <a href={`/myplayers/${userId}`}>My Players</a>
-              </li>
-            ) : (
-              ""
-            )}
           </ul>
         </div>
         <a className="btn btn-ghost text-xl text-primary font-bold">
@@ -82,39 +78,50 @@ export default function Navbar() {
               Home
             </Link>
           </li>
-          <li>
-            <a href="/player/add">Add New Player</a>
-          </li>
+
           <li>
             <Link href="/#players" className="hover:text-primary">
               Players
             </Link>
           </li>
-          {user ? (
-            <li>
-              <a href={`/myplayers/${userId}`}>My Players</a>
-            </li>
-          ) : (
-            ""
-          )}
         </ul>
       </div>
-      {user ? (
+      {isClient ? (
         <div className="navbar-end">
-          <SignedIn>
-            <UserButton />
-          </SignedIn>
+          <div className="dropdown dropdown-end">
+            <div
+              tabIndex={0}
+              role="button"
+              className="btn btn-ghost btn-circle avatar"
+            >
+              <div className="w-10 rounded-full">
+                <div className="avatar placeholder">
+                  <div className="bg-neutral text-neutral-content w-10 rounded-full">
+                    <span className="text-xl">{user?.given_name?.[0]}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <ul
+              tabIndex={0}
+              className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
+            >
+              <li>
+                <a href="/player/add">Add New Player</a>
+              </li>
+              <li>
+                <Link href="/api/auth/logout">Logout</Link>
+              </li>
+              <li>
+                <a href={`/myplayers/${user?.id}`}>My Players</a>
+              </li>
+            </ul>
+          </div>
         </div>
       ) : (
         <div className="navbar-end">
-          <SignedOut>
-            <SignInButton>
-              <button className="btn btn-secondary mr-2">Sign In</button>
-            </SignInButton>
-            <SignUpButton>
-              <button className="btn btn-primary">Sign Up</button>
-            </SignUpButton>
-          </SignedOut>
+          <LoginLink className="btn btn-secondary mr-2"> Sign In</LoginLink>
+          <RegisterLink className="btn btn-primary"> Sign Up</RegisterLink>
         </div>
       )}
     </div>
