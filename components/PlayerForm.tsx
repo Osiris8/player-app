@@ -1,4 +1,5 @@
 "use client";
+import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import { useState, useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -6,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { useAuth } from "@clerk/nextjs";
+
 import {
   Select,
   SelectContent,
@@ -34,7 +35,7 @@ interface PlayerFormProps {
 }
 
 export default function PlayerForm({ initialData }: PlayerFormProps) {
-  const { userId } = useAuth();
+  const { user } = useKindeBrowserClient();
   const router = useRouter();
   const pathname = usePathname();
   const [isPlayerCreator, setIsPlayerCreator] = useState(false);
@@ -58,8 +59,8 @@ export default function PlayerForm({ initialData }: PlayerFormProps) {
 
   useEffect(() => {
     // Update UserId if it's available
-    if (userId) {
-      setFormData((prev) => ({ ...prev, userId: userId }));
+    if (user?.id) {
+      setFormData((prev) => ({ ...prev, userId: user.id }));
 
       const playerId = pathname.split("/").pop();
 
@@ -75,7 +76,7 @@ export default function PlayerForm({ initialData }: PlayerFormProps) {
             console.log(data);
             // Vérify if the creator exist
 
-            if (data.userId === userId) {
+            if (data.userId === user?.id) {
               setFormData(data); // Pre-fill fields if creator
               setIsPlayerCreator(true);
             }
@@ -87,7 +88,7 @@ export default function PlayerForm({ initialData }: PlayerFormProps) {
         fetchPlayerData();
       }
     }
-  }, [userId, pathname]);
+  }, [user?.id, pathname]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
