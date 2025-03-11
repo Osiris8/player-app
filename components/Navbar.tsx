@@ -6,11 +6,12 @@ import {
   SignedOut,
   UserButton,
 } from "@clerk/nextjs";
-import { useUser } from "@clerk/nextjs";
+import { useUser, useAuth } from "@clerk/nextjs";
 import Link from "next/link";
 
 export default function Navbar() {
   const { user } = useUser();
+  const { userId } = useAuth();
 
   return (
     <div className="navbar bg-white">
@@ -47,6 +48,16 @@ export default function Navbar() {
                 Players
               </Link>
             </li>
+            <li>
+              <a href="/player/add">Add New Player</a>
+            </li>
+            {user ? (
+              <li>
+                <a href={`/myplayers/${userId}`}>My Players</a>
+              </li>
+            ) : (
+              ""
+            )}
           </ul>
         </div>
         <a className="btn btn-ghost text-xl text-primary font-bold">
@@ -71,12 +82,21 @@ export default function Navbar() {
               Home
             </Link>
           </li>
-
+          <li>
+            <a href="/player/add">Add New Player</a>
+          </li>
           <li>
             <Link href="/#players" className="hover:text-primary">
               Players
             </Link>
           </li>
+          {user ? (
+            <li>
+              <a href={`/myplayers/${userId}`}>My Players</a>
+            </li>
+          ) : (
+            ""
+          )}
         </ul>
       </div>
       {user ? (
