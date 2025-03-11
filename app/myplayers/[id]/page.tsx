@@ -2,7 +2,6 @@
 import PlayerCard from "@/components/PlayerCard";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import { useState, useEffect } from "react";
 interface Player {
   _id: string;
@@ -17,21 +16,21 @@ import { usePathname } from "next/navigation";
 import Search from "@/components/Search";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-
+import { useAuth } from "@clerk/nextjs";
 export default function Card() {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [players, setPlayers] = useState<Player[]>([]);
   const router = useRouter();
   const pathname = usePathname();
-  const { user } = useKindeBrowserClient();
+  const { userId } = useAuth();
   useEffect(() => {
     const urlId = `${pathname}`.split("/").pop();
     if (!urlId) return;
     console.log(urlId);
-    if (!user?.id) return;
+    if (!userId) return;
     const fetchPlayers = async () => {
       try {
-        if (urlId === user?.id) {
+        if (urlId === userId) {
           const response = await fetch(`/api/myplayers/${urlId}`);
           if (!response.ok) {
             router.push("/error");
@@ -48,7 +47,7 @@ export default function Card() {
       }
     };
     fetchPlayers();
-  }, [pathname, user?.id, router]);
+  }, [pathname, userId, router]);
   const filteredPlayers = players.filter((player) =>
     player.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
