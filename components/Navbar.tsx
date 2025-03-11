@@ -1,22 +1,16 @@
 "use client";
-import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import {
-  RegisterLink,
-  LoginLink,
-} from "@kinde-oss/kinde-auth-nextjs/components";
+  SignInButton,
+  SignUpButton,
+  SignedIn,
+  SignedOut,
+  UserButton,
+} from "@clerk/nextjs";
+import { useUser } from "@clerk/nextjs";
 import Link from "next/link";
-import { useEffect } from "react";
+
 export default function Navbar() {
-  const { user } = useKindeBrowserClient();
-
-  useEffect(() => {
-    const getUser = async () => {
-      await user;
-
-      console.log(user);
-    };
-    getUser();
-  }, [user]);
+  const { user } = useUser();
 
   return (
     <div className="navbar bg-white">
@@ -87,40 +81,16 @@ export default function Navbar() {
       </div>
       {user ? (
         <div className="navbar-end">
-          <div className="dropdown dropdown-end">
-            <div
-              tabIndex={0}
-              role="button"
-              className="btn btn-ghost btn-circle avatar"
-            >
-              <div className="w-10 rounded-full">
-                <div className="avatar placeholder">
-                  <div className="bg-neutral text-neutral-content w-10 rounded-full">
-                    <span className="text-xl">{user?.given_name?.[0]}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <ul
-              tabIndex={0}
-              className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
-            >
-              <li>
-                <a href="/player/add">Add New Player</a>
-              </li>
-              <li>
-                <Link href="/api/auth/logout">Logout</Link>
-              </li>
-              <li>
-                <a href={`/myplayers/${user?.id}`}>My Players</a>
-              </li>
-            </ul>
-          </div>
+          <SignedIn>
+            <UserButton />
+          </SignedIn>
         </div>
       ) : (
         <div className="navbar-end">
-          <LoginLink className="btn btn-secondary mr-2"> Sign In</LoginLink>
-          <RegisterLink className="btn btn-primary"> Sign Up</RegisterLink>
+          <SignedOut>
+            <SignInButton className="btn btn-secondary mr-2" />
+            <SignUpButton className="btn btn-primary" />
+          </SignedOut>
         </div>
       )}
     </div>
