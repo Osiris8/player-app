@@ -5,15 +5,14 @@ import {
   LoginLink,
 } from "@kinde-oss/kinde-auth-nextjs/components";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 export default function Navbar() {
   const { user } = useKindeBrowserClient();
-  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
     const getUser = async () => {
       await user;
-      setIsClient(true);
+
       console.log(user);
     };
     getUser();
