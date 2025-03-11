@@ -12,10 +12,9 @@ export default function Navbar() {
 
   useEffect(() => {
     const getUser = async () => {
-      if (user && user.id) {
-        setIsClient(true);
-        console.log(user);
-      }
+      await user;
+      setIsClient(true);
+      console.log(user);
     };
     getUser();
   }, [user]);
@@ -87,7 +86,7 @@ export default function Navbar() {
           </li>
         </ul>
       </div>
-      {user && isClient ? (
+      {user ? (
         <div className="navbar-end">
           <div className="dropdown dropdown-end">
             <div
