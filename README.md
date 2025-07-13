@@ -155,9 +155,16 @@ To test the API endpoints, use **Postman** to send requests to the deployed API 
 - **Body** (JSON):
   ```json
   {
-    "name": "Updated Player Name",
-    "position": "Midfielder",
-    "team": "FC Barcelona"
+    "name": "Lionel Messi",
+    "imageUrl": "https://example.com/images/messi.jpg",
+    "club": "Inter Miami",
+    "country": "Argentina",
+    "position": "Forward",
+    "age": 37,
+    "description": "Widely regarded as one of the greatest footballers of all time, known for his exceptional dribbling and playmaking.",
+    "history": "Started his career at FC Barcelona's youth academy, La Masia, before making his senior debut in 2004.",
+    "career": "FC Barcelona (2004-2021), Paris Saint-Germain (2021-2023), Inter Miami (2023-present)",
+    "goals": 819
   }
   ```
 - **Response**: Returns the updated player. Replace `your-player-id` with the actual player ID.
