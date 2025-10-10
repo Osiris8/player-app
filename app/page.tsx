@@ -1,27 +1,19 @@
-"use client";
 import Footer from "@/components/Footer";
 import Hero from "@/components/Hero";
 
 import Card from "@/components/Card";
-import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
+import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import {
   RegisterLink,
   LoginLink,
 } from "@kinde-oss/kinde-auth-nextjs/components";
 import Link from "next/link";
-import { useEffect, useState } from "react";
 
-export default function Home() {
-  const { user, isAuthenticated } = useKindeBrowserClient();
-  const [isClient, setIsClient] = useState(false);
-  useEffect(() => {
-    const getUser = async () => {
-      if (user && user.id) {
-        setIsClient(true);
-      }
-    };
-    getUser();
-  }, [user]);
+export default async function Home() {
+  const { isAuthenticated, getUser } = getKindeServerSession();
+  const isUserAuthenticated = await isAuthenticated();
+  const user = await getUser();
+
   return (
     <div>
       <div className="navbar bg-white">
@@ -90,7 +82,7 @@ export default function Home() {
             </li>
           </ul>
         </div>
-        {isAuthenticated || isClient ? (
+        {isUserAuthenticated ? (
           <div className="navbar-end">
             <div className="dropdown dropdown-end">
               <div
