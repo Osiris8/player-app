@@ -9,9 +9,19 @@ import {
   LoginLink,
 } from "@kinde-oss/kinde-auth-nextjs/components";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 export default function Home() {
   const { user, isAuthenticated } = useKindeBrowserClient();
+  const [isClient, setIsClient] = useState(false);
+  useEffect(() => {
+    const getUser = async () => {
+      if (user && user.id) {
+        setIsClient(true);
+      }
+    };
+    getUser();
+  }, [user]);
   return (
     <div>
       <div className="navbar bg-white">
@@ -80,7 +90,7 @@ export default function Home() {
             </li>
           </ul>
         </div>
-        {isAuthenticated ? (
+        {isAuthenticated || isClient ? (
           <div className="navbar-end">
             <div className="dropdown dropdown-end">
               <div
